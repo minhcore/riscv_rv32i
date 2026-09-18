@@ -15,6 +15,7 @@ logic [31:0] reg[32];
 
 assign rd1 = reg[a1];
 assign rd2 = reg[a2];
+assign reg[0] = 32'd0;
 
 always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin

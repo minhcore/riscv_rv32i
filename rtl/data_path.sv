@@ -7,7 +7,7 @@ module data_path(
     input logic         rst_n,
     input logic         pc_src,
     input logic         result_src,
-    input logic         alu_control,
+    input logic [2:0]   alu_control,
     input logic         alu_src,
     input logic [1:0]   imm_src,
     input logic         reg_write,
