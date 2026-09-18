@@ -8,7 +8,7 @@ module program_counter (
 
 always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
-        // reset pc to what?
+        pc <= 32'd0; // reset vector
     end
     else begin
         pc <= pc_next;

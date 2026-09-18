@@ -2,6 +2,7 @@ module data_path(
     output logic [31:0] alu_result,
     output logic        zero,
     output logic [31:0] write_data,
+    output logic [31:0] instr,
 
     input logic         clk,
     input logic         rst_n,
@@ -11,7 +12,6 @@ module data_path(
     input logic         alu_src,
     input logic [1:0]   imm_src,
     input logic         reg_write,
-    input logic [31:0]  instr,
     input logic [31:0]  read_data
 );
 
@@ -26,6 +26,11 @@ program_counter program_counter(
     .clk(clk),
     .rst_n(rst_n),
     .pc_next(pc_next_net)
+);
+
+instruction_memory rom(
+    .instr(instr),
+    .address(pc_net)
 );
 
 assign wd3_net = (result_src) ? read_data : alu_result; 

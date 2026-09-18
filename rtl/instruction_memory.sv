@@ -6,10 +6,10 @@ module instruction_memory(
 
 logic [31:0] mem[1024];
 
-assign instr = mem[address];
+assign instr = mem[address[11:2]];
 
 initial begin
-    $readmemh("mem.txt", mem);
+    $readmemh("flow/mem.h", mem);
 end
 
 endmodule
