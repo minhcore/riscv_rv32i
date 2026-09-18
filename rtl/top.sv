@@ -44,4 +44,9 @@ control_unit control_unit(
     .zero(zero_net)
 );
 
+instruction_memory rom(
+    .instr(instr),
+    .address(pc)
+);
+
 endmodule
