@@ -1,0 +1,10 @@
+rtl/alu.sv 
+rtl/alu_decoder.sv 
+rtl/main_decoder.sv 
+rtl/control_unit.sv 
+rtl/extend_imm.sv 
+rtl/instruction_memory.sv 
+rtl/program_counter.sv 
+rtl/register_file.sv 
+rtl/data_path.sv 
+rtl/top.sv

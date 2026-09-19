@@ -15,12 +15,11 @@ module data_path(
     input logic [31:0]  read_data
 );
 
-logic [31:0] wd3_temp, rd1_src_a, rd2_temp, src_b_net, imm_ext_net;
-logic pc_next_net, pc_net;
+logic [31:0] wd3_net, rd1_src_a, rd2_temp, src_b_net, imm_ext_net, pc_next_net, pc_net;
 
 assign write_data = rd2_temp;
 
-assign pc_next_net = (pc_src_net) ? (pc_net + imm_ext_net) : (pc_net + 32'd4);
+assign pc_next_net = (pc_src) ? (pc_net + imm_ext_net) : (pc_net + 32'd4);
 program_counter program_counter(
     .pc(pc_net),
     .clk(clk),

@@ -1,8 +1,8 @@
 module extend_imm(
-    output logic [31:0] imm_ext;
+    output logic [31:0] imm_ext,
     
-    input logic [31:0]  instr;
-    input logic [1:0]   imm_src;
+    input logic [31:0]  instr,
+    input logic [1:0]   imm_src
 );
 
 always_comb begin

@@ -4,7 +4,7 @@ module main_decoder(
     output logic        mem_write,
     output logic        alu_src,
     output logic [1:0]  imm_src,
-    output logic        reg_write
+    output logic        reg_write,
     output logic [1:0]  alu_op,
 
     input logic [6:0]   op
@@ -47,6 +47,15 @@ always_comb begin
         result_src  = 0;
         branch      = 1;
         alu_op      = 2'b01;
+    end
+    default: begin
+        reg_write   = 0;
+        imm_src     = 2'b00;
+        alu_src     = 0;
+        mem_write   = 0;
+        result_src  = 0;
+        branch      = 0;
+        alu_op      = 2'b00;
     end
     endcase
 end
