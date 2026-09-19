@@ -8,9 +8,9 @@ module top(
     input logic [31:0]  read_data // data from memory
 );
 
-logic zero_net, pc_src_net, result_src_net, alu_src_net, reg_write_net;
+logic zero_net, pc_src_net, alu_src_net, reg_write_net;
 logic [2:0] alu_control_net;
-logic [1:0] imm_src_net;
+logic [1:0] imm_src_net, result_src_net;
 logic [31:0] instr;
 
 data_path data_path(

@@ -7,7 +7,7 @@ module data_path(
     input logic         clk,
     input logic         rst_n,
     input logic         pc_src,
-    input logic         result_src,
+    input logic [1:0]   result_src,
     input logic [2:0]   alu_control,
     input logic         alu_src,
     input logic [1:0]   imm_src,
@@ -32,7 +32,14 @@ instruction_memory rom(
     .address(pc_net)
 );
 
-assign wd3_net = (result_src) ? read_data : alu_result; 
+always_comb begin
+    case(result_src)
+    2'b00: wd3_net = alu_result;
+    2'b01: wd3_net = read_data;
+    2'b10: wd3_net = pc_net + 32'd4;
+    default: wd3_net = 0;
+    endcase
+end 
 register_file register_file(
     .rd1(rd1_src_a),
     .rd2(rd2_temp),
