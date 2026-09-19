@@ -48,6 +48,15 @@ always_comb begin
         branch      = 1;
         alu_op      = 2'b01;
     end
+    7'b0010011: begin // addi
+        reg_write   = 1;
+        imm_src     = 2'b00;
+        alu_src     = 1;
+        mem_write   = 0;
+        result_src  = 0;
+        branch      = 0;
+        alu_op      = 2'b10;
+    end
     default: begin
         reg_write   = 0;
         imm_src     = 2'b00;
