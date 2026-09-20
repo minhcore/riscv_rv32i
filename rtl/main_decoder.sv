@@ -87,7 +87,7 @@ always_comb begin
         mem_write   = 0;
         result_src  = 2'b10;
         branch      = 0;
-        alu_op      = 2'b10;
+        alu_op      = 2'b00;
         jump        = 0;
         jumpr       = 1;
     end
