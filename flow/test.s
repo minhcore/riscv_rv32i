@@ -14,6 +14,8 @@ main:
 
 	lui a3, 0x12345
 
+    auipc a4, 0x54321
+
 loop:
     beq  zero, zero, loop  
 

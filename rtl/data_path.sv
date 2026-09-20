@@ -9,13 +9,14 @@ module data_path(
     input logic [1:0]   pc_src,
     input logic [1:0]   result_src,
     input logic [2:0]   alu_control,
-    input logic         alu_src,
+    input logic         alu_src_a,
+    input logic         alu_src_b,
     input logic [2:0]   imm_src,
     input logic         reg_write,
     input logic [31:0]  read_data
 );
 
-logic [31:0] wd3_net, rd1_src_a, rd2_temp, src_b_net, imm_ext_net, pc_next_net, pc_net;
+logic [31:0] wd3_net, rd1_temp, rd2_temp, src_a_net, src_b_net, imm_ext_net, pc_next_net, pc_net;
 
 assign write_data = rd2_temp;
 
@@ -49,7 +50,7 @@ always_comb begin
     endcase
 end 
 register_file register_file(
-    .rd1(rd1_src_a),
+    .rd1(rd1_temp),
     .rd2(rd2_temp),
     .clk(clk),
     .rst_n(rst_n),
@@ -60,11 +61,12 @@ register_file register_file(
     .we3(reg_write)
 );
 
-assign src_b_net = (alu_src) ? imm_ext_net : rd2_temp;
+assign src_a_net = (alu_src_a) ? pc_net : rd1_temp;
+assign src_b_net = (alu_src_b) ? imm_ext_net : rd2_temp;
 alu alu(
     .alu_result(alu_result),
     .zero(zero),
-    .src_a(rd1_src_a),
+    .src_a(src_a_net),
     .src_b(src_b_net),
     .alu_control(alu_control)
 );
