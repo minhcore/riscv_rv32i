@@ -1,9 +1,9 @@
 module control_unit(
-    output logic        pc_src,
+    output logic [1:0]  pc_src,
     output logic [1:0]  result_src,
     output logic        mem_write,
     output logic        alu_src,
-    output logic [1:0]  imm_src,
+    output logic [2:0]  imm_src,
     output logic        reg_write,
     output logic [2:0]  alu_control,
 
@@ -13,14 +13,16 @@ module control_unit(
     input logic         zero    
 );
 
-logic branch_net, jump_net;
+logic branch_net, jump_net, jumr_net;
 logic [1:0] alu_op_net;
 
-assign pc_src = (branch_net & zero) | jump_net;
+assign pc_src[0] = (branch_net & zero) | jump_net;
+assign pc_src[1] = jumr_net;
 
 main_decoder main_decoder(
     .branch(branch_net),
     .jump(jump_net),
+    .jumpr(jumr_net),
     .result_src(result_src),
     .mem_write(mem_write),
     .alu_src(alu_src),

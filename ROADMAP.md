@@ -45,11 +45,12 @@ Lộ trình phát triển đưa vi xử lý từ mô hình đồ chơi trên mô
 - [x] Lệnh tức thời: `addi`
 - [x] Lệnh rẽ nhánh có điều kiện: `beq`
 - [x] Lệnh nhảy không điều kiện: `jal` (với $PC + 4$ ghi về thanh ghi đích)
+- [x] Lệnh nhảy gián tiếp: `jalr` (hỗ trợ lời gọi hàm và `ret`)
+- [x] Lệnh nạp tức thời 20-bit cao: `lui` (U-type)
 - [x] Toolchain Flow: C $\rightarrow$ ASM (`test.s`) $\rightarrow$ ELF $\rightarrow$ Verilog Hex (`mem.h`) $\rightarrow$ ModelSim.
 
 #### Mục tiêu tiếp theo:
-- [ ] **Bổ sung lệnh `jalr`:** Hỗ trợ lời gọi hàm gián tiếp và quay về từ hàm (`ret`, `jr ra`).
-- [ ] **Bổ sung lệnh `lui` & `auipc`:** Nạp hằng số 32-bit và hỗ trợ địa chỉ PC-relative.
+- [ ] **Bổ sung lệnh `auipc`:** Hỗ trợ địa chỉ PC-relative ($PC + \text{Imm} \ll 12$).
 - [ ] **Mở rộng các lệnh rẽ nhánh:** `bne`, `blt`, `bge`, `bltu`, `bgeu` (so sánh có dấu / không dấu).
 - [ ] **Mở rộng các lệnh dịch bit (Shift):** `sll`, `srl`, `sra`, `slli`, `srli`, `srai`.
 - [ ] **Hỗ trợ tải dữ liệu cỡ nhỏ:** `lb`, `lbu`, `lh`, `lhu`, `sb`, `sh` (đọc/ghi 8-bit và 16-bit).

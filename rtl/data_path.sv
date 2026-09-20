@@ -6,11 +6,11 @@ module data_path(
 
     input logic         clk,
     input logic         rst_n,
-    input logic         pc_src,
+    input logic [1:0]   pc_src,
     input logic [1:0]   result_src,
     input logic [2:0]   alu_control,
     input logic         alu_src,
-    input logic [1:0]   imm_src,
+    input logic [2:0]   imm_src,
     input logic         reg_write,
     input logic [31:0]  read_data
 );
@@ -19,7 +19,14 @@ logic [31:0] wd3_net, rd1_src_a, rd2_temp, src_b_net, imm_ext_net, pc_next_net, 
 
 assign write_data = rd2_temp;
 
-assign pc_next_net = (pc_src) ? (pc_net + imm_ext_net) : (pc_net + 32'd4);
+always_comb begin
+    case(pc_src)
+    2'b00: pc_next_net = pc_net + 32'd4;
+    2'b01: pc_next_net = pc_net + imm_ext_net;
+    2'b10: pc_next_net = alu_result;
+    default: pc_next_net = 32'd0;
+    endcase
+end
 program_counter program_counter(
     .pc(pc_net),
     .clk(clk),
@@ -37,6 +44,7 @@ always_comb begin
     2'b00: wd3_net = alu_result;
     2'b01: wd3_net = read_data;
     2'b10: wd3_net = pc_net + 32'd4;
+    2'b11: wd3_net = imm_ext_net;
     default: wd3_net = 0;
     endcase
 end 
