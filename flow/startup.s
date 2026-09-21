@@ -2,7 +2,7 @@
 .globl _start
 
 _start:
-    li sp, 0x1000 # sp at top RAM
+    li sp, 0x100 # sp at top RAM
 
     call main
 
