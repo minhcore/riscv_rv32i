@@ -6,7 +6,7 @@ module control_unit(
     output logic        alu_src_b,
     output logic [2:0]  imm_src,
     output logic        reg_write,
-    output logic [2:0]  alu_control,
+    output logic [3:0]  alu_control,
 
     input logic [6:0]   op,
     input logic [2:0]   funct3,

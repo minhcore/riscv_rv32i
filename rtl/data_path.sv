@@ -10,7 +10,7 @@ module data_path(
     input logic         rst_n,
     input logic [1:0]   pc_src,
     input logic [1:0]   result_src,
-    input logic [2:0]   alu_control,
+    input logic [3:0]   alu_control,
     input logic         alu_src_a,
     input logic         alu_src_b,
     input logic [2:0]   imm_src,

@@ -9,7 +9,8 @@ module top(
 );
 
 logic zero_net, lt_net, ltu_net, alu_src_a_net, alu_src_b_net, reg_write_net;
-logic [2:0] alu_control_net, imm_src_net;
+logic [3:0] alu_control_net;
+logic [2:0] imm_src_net;
 logic [1:0] result_src_net, pc_src_net;
 logic [31:0] instr;
 
