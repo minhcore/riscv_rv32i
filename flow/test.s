@@ -1,19 +1,32 @@
-.text
-.align 2
-.globl main
-
+	.file	"test.c"
+	.option nopic
+	.attribute arch, "rv32i2p1"
+	.attribute unaligned_access, 0
+	.attribute stack_align, 16
+	.text
+	.align	2
+	.globl	add
+	.type	add, @function
+add:
+	add	a0,a0,a1
+	ret
+	.size	add, .-add
+	.align	2
+	.globl	main
+	.type	main, @function
 main:
-    addi t0, zero, 1
-    addi t1, zero, 2
-    addi t2, zero, -16
-    slli a0, t0, 3
-    slli a1, t1, 4
-    sll a2, t0, t1
-    srli a3, a0, 1
-    srl a4, a1, t1
-    srai a5, t2, 2
-    sra a6, t2, t1
-    srli a7, t2, 2
-
-loop:
-    beq zero, zero, loop
+	addi	sp,sp,-16
+	li	a5,100
+	sw	a5,12(sp)
+	li	a5,76
+	sw	a5,8(sp)
+	lw	a5,12(sp)
+	lw	a4,8(sp)
+	add	a5,a5,a4
+	sw	a5,4(sp)
+	lw	a0,4(sp)
+	addi	sp,sp,16
+	jr	ra
+	.size	main, .-main
+	.ident	"GCC: (GNU) 14.2.0"
+	.section	.note.GNU-stack,"",@progbits
