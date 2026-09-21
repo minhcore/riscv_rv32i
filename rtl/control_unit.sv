@@ -14,10 +14,19 @@ module control_unit(
     input logic         zero    
 );
 
-logic branch_net, jump_net, jumr_net;
+logic branch_net, jump_net, jumr_net, take_branch;
 logic [1:0] alu_op_net;
 
-assign pc_src[0] = (branch_net & zero) | jump_net;
+always_comb begin
+   case(funct3)
+    3'b000: take_branch = (zero == 1);  // beq
+    3'b001: take_branch = (zero != 1);  // bne
+    //3'b100: ...
+    default: take_branch = 1'b0;
+   endcase 
+end
+
+assign pc_src[0] = (branch_net & take_branch) | jump_net;
 assign pc_src[1] = jumr_net;
 
 main_decoder main_decoder(
