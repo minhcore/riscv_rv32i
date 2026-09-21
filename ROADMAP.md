@@ -48,7 +48,7 @@ Chiến lược phát triển thực tế: Tập trung đưa CPU đơn kỳ hoà
 - [x] Lệnh truy xuất bộ nhớ: `lw`, `sw`
 - [x] Lệnh số học R-type: `add`, `sub`, `and`, `or`, `slt`
 - [x] Lệnh tức thời: `addi`
-- [x] Lệnh rẽ nhánh có điều kiện: `beq`
+- [x] Toàn bộ lệnh rẽ nhánh có điều kiện (B-type): `beq`, `bne`, `blt`, `bge`, `bltu`, `bgeu` (so sánh có dấu / không dấu)
 - [x] Lệnh nhảy không điều kiện: `jal` (với PC + 4 ghi về thanh ghi đích)
 - [x] Lệnh nhảy gián tiếp: `jalr` (hỗ trợ lời gọi hàm và ret)
 - [x] Lệnh nạp tức thời 20-bit cao: `lui` (U-type)
@@ -56,7 +56,6 @@ Chiến lược phát triển thực tế: Tập trung đưa CPU đơn kỳ hoà
 - [x] Toolchain Flow: C -> ASM (`test.s`) -> ELF -> Verilog Hex (`mem.h`) -> ModelSim.
 
 #### Mục tiêu tiếp theo:
-- [ ] **Mở rộng các lệnh rẽ nhánh còn lại:** `bne`, `blt`, `bge`, `bltu`, `bgeu` (so sánh có dấu / không dấu).
 - [ ] **Mở rộng các lệnh dịch bit (Shift):** `sll`, `srl`, `sra`, `slli`, `srli`, `srai`.
 - [ ] **Hỗ trợ tải dữ liệu cỡ nhỏ:** `lb`, `lbu`, `lh`, `lhu`, `sb`, `sh` (đọc/ghi 8-bit và 16-bit).
 - [ ] **Xây dựng `startup.s`:** Khởi tạo con trỏ ngăn xếp `sp` trỏ vào đỉnh RAM và nhảy vào hàm `main()`.

@@ -1,6 +1,8 @@
 module data_path(
     output logic [31:0] alu_result,
     output logic        zero,
+    output logic        lt,
+    output logic        ltu,
     output logic [31:0] write_data,
     output logic [31:0] instr,
 
@@ -66,6 +68,8 @@ assign src_b_net = (alu_src_b) ? imm_ext_net : rd2_temp;
 alu alu(
     .alu_result(alu_result),
     .zero(zero),
+    .lt(lt),
+    .ltu(ltu),
     .src_a(src_a_net),
     .src_b(src_b_net),
     .alu_control(alu_control)

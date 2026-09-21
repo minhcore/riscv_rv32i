@@ -8,7 +8,7 @@ module top(
     input logic [31:0]  read_data // data from memory
 );
 
-logic zero_net, alu_src_a_net, alu_src_b_net, reg_write_net;
+logic zero_net, lt_net, ltu_net, alu_src_a_net, alu_src_b_net, reg_write_net;
 logic [2:0] alu_control_net, imm_src_net;
 logic [1:0] result_src_net, pc_src_net;
 logic [31:0] instr;
@@ -16,6 +16,8 @@ logic [31:0] instr;
 data_path data_path(
     .alu_result(alu_result),
     .zero(zero_net),
+    .lt(lt_net),
+    .ltu(ltu_net),
     .write_data(write_data),
     .instr(instr),
     .clk(clk),
@@ -42,7 +44,9 @@ control_unit control_unit(
     .op(instr[6:0]),
     .funct3(instr[14:12]),
     .funct7(instr[30]),
-    .zero(zero_net)
+    .zero(zero_net),
+    .lt(lt_net),
+    .ltu(ltu_net)
 );
 
 endmodule

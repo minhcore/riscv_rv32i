@@ -51,7 +51,7 @@ always_comb begin
         jump        = 0;
         jumpr       = 0;
     end
-    7'b1100011: begin // beq, bne
+    7'b1100011: begin // beq, bne, blt, bge, bltn, bgen
         reg_write   = 0;
         imm_src     = 3'b010;
         alu_src_a   = 0;

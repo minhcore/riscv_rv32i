@@ -1,6 +1,8 @@
 module alu(
     output logic [31:0] alu_result,
     output logic        zero,
+    output logic        lt,
+    output logic        ltu,
 
     input logic [31:0]  src_a,
     input logic [31:0]  src_b,
@@ -8,6 +10,8 @@ module alu(
 );
 
 assign zero = (alu_result == 32'd0);
+assign lt = ($signed(src_a) < $signed(src_b));
+assign ltu = (src_a < src_b);
 
 always_comb begin
     case(alu_control)

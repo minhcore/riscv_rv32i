@@ -11,7 +11,9 @@ module control_unit(
     input logic [6:0]   op,
     input logic [2:0]   funct3,
     input logic         funct7,
-    input logic         zero    
+    input logic         zero,
+    input logic         lt,
+    input logic         ltu  
 );
 
 logic branch_net, jump_net, jumr_net, take_branch;
@@ -21,7 +23,10 @@ always_comb begin
    case(funct3)
     3'b000: take_branch = (zero == 1);  // beq
     3'b001: take_branch = (zero != 1);  // bne
-    //3'b100: ...
+    3'b100: take_branch = (lt == 1);    // blt
+    3'b101: take_branch = (lt != 1);    // bge
+    3'b110: take_branch = (ltu == 1);   // bltu
+    3'b111: take_branch = (ltu != 1);   // bgeu
     default: take_branch = 1'b0;
    endcase 
 end
