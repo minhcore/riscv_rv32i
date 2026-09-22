@@ -38,14 +38,14 @@ initial begin
     $finish;
 end
 
-// initial begin
-//     forever begin
-//         @(negedge clk);
-//         if (mem_write_net) begin
-//             $display("[%0t] [STORE] Value = 32'd%0d, Address = 32'h%0h", $time, write_data_net, alu_result_net);
-//         end
-//     end
-// end
+initial begin
+    forever begin
+        @(negedge clk);
+        if (mem_write_net) begin
+            $display("[%0t] [STORE] Value = 32'd%0d, Address = 32'h%0h", $time, write_data_net, alu_result_net);
+        end
+    end
+end
 
 
 initial begin

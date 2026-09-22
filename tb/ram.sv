@@ -8,16 +8,16 @@ module ram(
     input logic         mem_write
 );
 
-logic [31:0] mem[64];
+logic [31:0] mem[1024];
 
-assign read_data = mem[address[7:2]];
+assign read_data = mem[address[11:2]];
 
 always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
         
     end
     else if (mem_write) begin
-        mem[address[7:2]] <= write_data;
+        mem[address[11:2]] <= write_data;
     end
 end
 
