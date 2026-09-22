@@ -1,0 +1,6 @@
+read_verilog -sv rtl/alu.sv rtl/alu_decoder.sv rtl/control_unit.sv rtl/data_path.sv rtl/extend_imm.sv rtl/instruction_memory.sv rtl/main_decoder.sv rtl/program_counter.sv rtl/register_file.sv rtl/top.sv
+synth -top top
+dfflibmap -liberty synthesis/lib/NangateOpenCellLibrary_typical.lib
+abc -liberty synthesis/lib/NangateOpenCellLibrary_typical.lib
+clean
+write_verilog -noattr synthesis/netlist.v
