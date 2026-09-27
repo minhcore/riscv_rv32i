@@ -8,7 +8,8 @@ module register_file (
     input logic [4:0]   a2,
     input logic [4:0]   a3,
     input logic [31:0]  wd3,
-    input logic         we3   
+    input logic         we3,
+    input logic         stall   
 );
 
 logic [31:0] internal_register[32];
@@ -20,7 +21,7 @@ always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
         // reset what?
     end
-    else if (we3) begin
+    else if (we3 && !stall) begin
         internal_register[a3] <= wd3;
     end
 end

@@ -1,0 +1,18 @@
+﻿
+sw/build/main.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	00001137          	lui	sp,0x1
+   4:	008000ef          	jal	c <main>
+
+00000008 <_exit>:
+   8:	0000006f          	j	8 <_exit>
+
+0000000c <main>:
+   c:	008007b7          	lui	a5,0x800
+  10:	00700713          	li	a4,7
+  14:	00e7a023          	sw	a4,0(a5) # 800000 <_stack_top+0x7ff000>
+  18:	0000006f          	j	18 <main+0xc>

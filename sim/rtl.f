@@ -1,0 +1,15 @@
+rtl/core/alu.sv 
+rtl/core/alu_decoder.sv 
+rtl/core/main_decoder.sv 
+rtl/core/control_unit.sv 
+rtl/core/extend_imm.sv 
+rtl/core/program_counter.sv 
+rtl/core/register_file.sv 
+rtl/core/data_path.sv 
+rtl/core/cpu.sv
+rtl/mem/instruction_memory.sv 
+rtl/mem/ram.sv
+rtl/periph/memory_controller.sv
+rtl/periph/cpu_apb_bridge.sv
+rtl/periph/gpio_apb.sv
+rtl/top.sv

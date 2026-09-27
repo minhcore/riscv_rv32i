@@ -3,14 +3,15 @@ module program_counter (
 
     input logic         clk,
     input logic         rst_n,
-    input logic [31:0]  pc_next  
+    input logic [31:0]  pc_next,
+    input logic         stall
 );
 
 always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
         pc <= 32'd0; // reset vector
     end
-    else begin
+    else if (!stall) begin
         pc <= pc_next;
     end
 end

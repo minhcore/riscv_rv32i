@@ -1,11 +1,12 @@
-module data_path(
+module data_path #(parameter DEPTH = 1024)(
+    output logic [31:0] pc,
     output logic [31:0] alu_result,
     output logic        zero,
     output logic        lt,
     output logic        ltu,
     output logic [31:0] write_data,
-    output logic [31:0] instr,
 
+    input logic [31:0]  instr,
     input logic         clk,
     input logic         rst_n,
     input logic [1:0]   pc_src,
@@ -15,11 +16,13 @@ module data_path(
     input logic         alu_src_b,
     input logic [2:0]   imm_src,
     input logic         reg_write,
-    input logic [31:0]  read_data
+    input logic [31:0]  read_data,
+    input logic         stall
 );
 
 logic [31:0] wd3_net, rd1_temp, rd2_temp, src_a_net, src_b_net, imm_ext_net, pc_next_net, pc_net;
 
+assign pc = pc_net;
 assign write_data = rd2_temp;
 
 always_comb begin
@@ -34,12 +37,8 @@ program_counter program_counter(
     .pc(pc_net),
     .clk(clk),
     .rst_n(rst_n),
-    .pc_next(pc_next_net)
-);
-
-instruction_memory rom(
-    .instr(instr),
-    .address(pc_net)
+    .pc_next(pc_next_net),
+    .stall(stall)
 );
 
 always_comb begin
@@ -60,7 +59,8 @@ register_file register_file(
     .a2(instr[24:20]),
     .a3(instr[11:7]),
     .wd3(wd3_net),
-    .we3(reg_write)
+    .we3(reg_write),
+    .stall(stall)
 );
 
 assign src_a_net = (alu_src_a) ? pc_net : rd1_temp;

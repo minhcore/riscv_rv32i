@@ -1,53 +1,126 @@
-module top(
-    output logic [31:0] alu_result, // address for memory
-    output logic [31:0] write_data,
-    output logic        mem_write,
+module top #(
+    RAM_DEPTH = 1024,
+    ROM_DEPTH = 1024,
+    DEFAULT_WIDTH = 32,
+    GPIO_WIDTH = 8
+)(
+    
+    input logic     clk,
+    input logic     rst_n,
 
-    input logic         clk,
-    input logic         rst_n,
-    input logic [31:0]  read_data // data from memory
+    // GPIO
+    output logic [GPIO_WIDTH-1:0]   gpio_out,
+    input logic [GPIO_WIDTH-1:0]    gpio_in
 );
 
-logic zero_net, lt_net, ltu_net, alu_src_a_net, alu_src_b_net, reg_write_net;
-logic [3:0] alu_control_net;
-logic [2:0] imm_src_net;
-logic [1:0] result_src_net, pc_src_net;
-logic [31:0] instr;
+logic stall_net, ram_stall, apb_stall, mem_write_net, mem_read_net, ram_sel, apb_sel, psel_net, rst_n_sync1, rst_n_sync2;
+logic [DEFAULT_WIDTH-1:0] address_net, write_data_net;
 
-data_path data_path(
-    .alu_result(alu_result),
-    .zero(zero_net),
-    .lt(lt_net),
-    .ltu(ltu_net),
-    .write_data(write_data),
-    .instr(instr),
+// APB interface
+logic [DEFAULT_WIDTH-1:0] prdata_net, pwdata_net, paddr_net;
+logic pready_net, pwrite_net, penable_net, pslverr_net;
+
+// Address Decoding
+assign ram_sel = (address_net < 32'h0080_0000);
+assign apb_sel = (address_net[31:20] == 12'h008);
+
+// Stall
+assign stall_net = ram_stall | apb_stall;
+
+// Write/Read Data From RAM or APB Bus
+logic [DEFAULT_WIDTH-1:0] read_data_net, ram_read_data_net, apb_read_data_net;
+logic ram_mem_write_net, ram_mem_read_net, apb_mem_write_net, apb_mem_read_net;
+assign ram_mem_write_net = mem_write_net && ram_sel;
+assign ram_mem_read_net = mem_read_net && ram_sel;
+assign apb_mem_write_net = mem_write_net && apb_sel;
+assign apb_mem_read_net = mem_read_net && apb_sel;
+assign read_data_net = apb_sel ? apb_read_data_net : ram_read_data_net;
+
+// Reset Synchronizer
+always_ff @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        rst_n_sync1 <= 0;
+        rst_n_sync2 <= 0;
+    end
+    else begin
+        rst_n_sync1 <= 1;
+        rst_n_sync2 <= rst_n_sync1;
+    end
+end
+
+// CPU Core Instruction Bus
+logic [DEFAULT_WIDTH-1:0] pc_net, instr_net;
+
+cpu cpu(
+    .pc(pc_net),
+    .instr(instr_net),
+    .alu_result(address_net),
+    .write_data(write_data_net),
+    .mem_write(mem_write_net),
+    .mem_read(mem_read_net),
     .clk(clk),
-    .rst_n(rst_n),
-    .pc_src(pc_src_net),
-    .result_src(result_src_net),
-    .alu_control(alu_control_net),
-    .alu_src_a(alu_src_a_net),
-    .alu_src_b(alu_src_b_net),
-    .imm_src(imm_src_net),
-    .reg_write(reg_write_net),
-    .read_data(read_data)
+    .rst_n(rst_n_sync2),
+    .read_data(read_data_net),
+    .stall(stall_net)
 );
 
-control_unit control_unit(
-    .pc_src(pc_src_net),
-    .result_src(result_src_net),
-    .mem_write(mem_write),
-    .alu_src_a(alu_src_a_net),
-    .alu_src_b(alu_src_b_net),
-    .imm_src(imm_src_net),
-    .reg_write(reg_write_net),
-    .alu_control(alu_control_net),
-    .op(instr[6:0]),
-    .funct3(instr[14:12]),
-    .funct7(instr[30]),
-    .zero(zero_net),
-    .lt(lt_net),
-    .ltu(ltu_net)
+instruction_memory #(
+    .DEPTH(ROM_DEPTH),
+    .MEM_FILE("sw/build/mem.h")
+) rom (
+    .instr(instr_net),
+    .address(pc_net)
+);
+
+ram #(RAM_DEPTH) ram(
+    .read_data(ram_read_data_net),
+    .write_data(write_data_net),
+    .address(address_net),
+    .clk(clk),
+    .mem_write(ram_mem_write_net),
+    .mem_read(ram_mem_read_net)
+);
+
+memory_controller memory_controller(
+    .stall(ram_stall),
+    .clk(clk),
+    .rst_n(rst_n_sync2),
+    .mem_read(ram_mem_read_net)
+);
+
+cpu_apb_bridge #(DEFAULT_WIDTH) cpu_apb_bridge(
+    .paddr(paddr_net),
+    .penable(penable_net),
+    .pwrite(pwrite_net),
+    .psel(psel_net),
+    .pwdata(pwdata_net),
+    .pclk(clk),
+    .presetn(rst_n_sync2),
+    .prdata(prdata_net),
+    .pslverr(pslverr_net),
+    .pready(pready_net),
+    .cpu_stall(apb_stall),
+    .cpu_slverr(), // not yet using
+    .cpu_read_data(apb_read_data_net),
+    .cpu_address(address_net),
+    .cpu_write_data(write_data_net),
+    .cpu_mem_write(apb_mem_write_net),
+    .cpu_mem_read(apb_mem_read_net)
+);
+
+gpio_apb #(.PORT_WIDTH(GPIO_WIDTH), .APB_WIDTH(DEFAULT_WIDTH)) gpio(
+    .data_out_port(gpio_out),
+    .data_in_port(gpio_in),
+    .prdata(prdata_net),
+    .pready(pready_net),
+    .pslverr(pslverr_net),
+    .pclk(clk),
+    .presetn(rst_n_sync2),
+    .psel(psel_net),
+    .pwrite(pwrite_net),
+    .paddr(paddr_net),
+    .penable(penable_net),
+    .pwdata(pwdata_net)
 );
 
 endmodule

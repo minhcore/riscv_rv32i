@@ -4,6 +4,7 @@ module main_decoder(
     output logic        jumpr,
     output logic [1:0]  result_src,
     output logic        mem_write,
+    output logic        mem_read,
     output logic        alu_src_a,
     output logic        alu_src_b,
     output logic [2:0]  imm_src,
@@ -21,6 +22,7 @@ always_comb begin
         alu_src_a   = 0;
         alu_src_b   = 1;
         mem_write   = 0;
+        mem_read    = 1;
         result_src  = 2'b01;
         branch      = 0;
         alu_op      = 2'b00;
@@ -33,6 +35,7 @@ always_comb begin
         alu_src_a   = 0;
         alu_src_b   = 1;
         mem_write   = 1;
+        mem_read    = 0;
         result_src  = 2'b00;
         branch      = 0;
         alu_op      = 2'b00;
@@ -45,6 +48,7 @@ always_comb begin
         alu_src_a   = 0;
         alu_src_b   = 0;
         mem_write   = 0;
+        mem_read    = 0;
         result_src  = 2'b00;
         branch      = 0;
         alu_op      = 2'b10;
@@ -57,6 +61,7 @@ always_comb begin
         alu_src_a   = 0;
         alu_src_b   = 0;
         mem_write   = 0;
+        mem_read    = 0;
         result_src  = 2'b00;
         branch      = 1;
         alu_op      = 2'b01;
@@ -69,6 +74,7 @@ always_comb begin
         alu_src_a   = 0;
         alu_src_b   = 1;
         mem_write   = 0;
+        mem_read    = 0;
         result_src  = 2'b00;
         branch      = 0;
         alu_op      = 2'b10;
@@ -81,6 +87,7 @@ always_comb begin
         alu_src_a   = 0;
         alu_src_b   = 0;
         mem_write   = 0;
+        mem_read    = 0;
         result_src  = 2'b10;
         branch      = 0;
         alu_op      = 2'b10;
@@ -93,6 +100,7 @@ always_comb begin
         alu_src_a   = 0;
         alu_src_b   = 1;
         mem_write   = 0;
+        mem_read    = 0;
         result_src  = 2'b10;
         branch      = 0;
         alu_op      = 2'b00;
@@ -105,6 +113,7 @@ always_comb begin
         alu_src_a   = 0;
         alu_src_b   = 0;
         mem_write   = 0;
+        mem_read    = 0;
         result_src  = 2'b11;
         branch      = 0;
         alu_op      = 2'b00;
@@ -117,6 +126,7 @@ always_comb begin
         alu_src_a   = 1;
         alu_src_b   = 1;
         mem_write   = 0;
+        mem_read    = 0;
         result_src  = 2'b00;
         branch      = 0;
         alu_op      = 2'b00;
@@ -129,6 +139,7 @@ always_comb begin
         alu_src_a   = 0;
         alu_src_b   = 0;
         mem_write   = 0;
+        mem_read    = 0;
         result_src  = 2'b00;
         branch      = 0;
         alu_op      = 2'b00;
