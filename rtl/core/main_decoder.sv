@@ -68,7 +68,7 @@ always_comb begin
         jump        = 0;
         jumpr       = 0;
     end
-    7'b0010011: begin // addi
+    7'b0010011: begin // addi, andi, ori, slli,... (all I type calculation)
         reg_write   = 1;
         imm_src     = 3'b000;
         alu_src_a   = 0;

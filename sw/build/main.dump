@@ -12,7 +12,22 @@ Disassembly of section .text:
    8:	0000006f          	j	8 <_exit>
 
 0000000c <main>:
-   c:	008007b7          	lui	a5,0x800
-  10:	00700713          	li	a4,7
-  14:	00e7a023          	sw	a4,0(a5) # 800000 <_stack_top+0x7ff000>
-  18:	0000006f          	j	18 <main+0xc>
+   c:	ff010113          	addi	sp,sp,-16 # ff0 <main+0xfe4>
+  10:	00012623          	sw	zero,12(sp)
+  14:	008006b7          	lui	a3,0x800
+  18:	00356737          	lui	a4,0x356
+  1c:	0006a023          	sw	zero,0(a3) # 800000 <_stack_top+0x7ff000>
+  20:	7df70713          	addi	a4,a4,2015 # 3567df <_stack_top+0x3557df>
+  24:	00c12783          	lw	a5,12(sp)
+  28:	02f75063          	bge	a4,a5,48 <main+0x3c>
+  2c:	0006a783          	lw	a5,0(a3)
+  30:	fff7c793          	not	a5,a5
+  34:	0017f793          	andi	a5,a5,1
+  38:	00f6a023          	sw	a5,0(a3)
+  3c:	00012623          	sw	zero,12(sp)
+  40:	00c12783          	lw	a5,12(sp)
+  44:	fef744e3          	blt	a4,a5,2c <main+0x20>
+  48:	00c12783          	lw	a5,12(sp)
+  4c:	00178793          	addi	a5,a5,1
+  50:	00f12623          	sw	a5,12(sp)
+  54:	fd1ff06f          	j	24 <main+0x18>

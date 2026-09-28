@@ -17,7 +17,8 @@ always_comb begin
     7'b10_000_11: alu_control = 4'b0001; // sub
     7'b10_010_??: alu_control = 4'b0101; // slt
     7'b10_110_??: alu_control = 4'b0011; // or
-    7'b10_111_??: alu_control = 4'b0010; // and
+    7'b10_100_??: alu_control = 4'b1000; // xor, xori
+    7'b10_111_??: alu_control = 4'b0010; // and, andi
     7'b10_001_??: alu_control = 4'b0100; // sll, sli
     7'b10_101_?0: alu_control = 4'b0110; // srl, srli
     7'b10_101_?1: alu_control = 4'b0111; // sra, srai

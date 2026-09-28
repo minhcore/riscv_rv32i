@@ -23,6 +23,7 @@ always_comb begin
     4'b0101: alu_result = ($signed(src_a) < $signed(src_b));
     4'b0110: alu_result = src_a >> src_b[4:0];
     4'b0111: alu_result = $signed(src_a) >>> src_b[4:0];
+    4'b1000: alu_result = src_a ^ src_b;
     default: alu_result = 0;
     endcase
 end

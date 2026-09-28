@@ -31,7 +31,7 @@ module tb;
         repeat (5) @(posedge clk);
         rst_n = 1;
 
-        repeat (50) @(posedge clk);
+        repeat (800) @(posedge clk);
         $finish;
     end
 
