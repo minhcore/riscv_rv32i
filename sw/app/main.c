@@ -4,11 +4,10 @@ int main() {
   volatile int count = 0;
   GPIO_DOUT = 0x00;
   while (1) {
-    if (count >= 3500000) {
-      GPIO_DOUT = (~GPIO_DOUT) & 0x01;
-      count = 0;
+    if (!(GPIO_DIN & 0x01)) {
+      GPIO_DOUT = 0b00111111;
     } else {
-      count++;
+      GPIO_DOUT = 0b00101010;
     }
   }
   return 0;

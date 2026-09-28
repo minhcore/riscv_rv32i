@@ -13,21 +13,18 @@ Disassembly of section .text:
 
 0000000c <main>:
    c:	ff010113          	addi	sp,sp,-16 # ff0 <main+0xfe4>
-  10:	00012623          	sw	zero,12(sp)
-  14:	008006b7          	lui	a3,0x800
-  18:	00356737          	lui	a4,0x356
-  1c:	0006a023          	sw	zero,0(a3) # 800000 <_stack_top+0x7ff000>
-  20:	7df70713          	addi	a4,a4,2015 # 3567df <_stack_top+0x3557df>
-  24:	00c12783          	lw	a5,12(sp)
-  28:	02f75063          	bge	a4,a5,48 <main+0x3c>
-  2c:	0006a783          	lw	a5,0(a3)
-  30:	fff7c793          	not	a5,a5
-  34:	0017f793          	andi	a5,a5,1
-  38:	00f6a023          	sw	a5,0(a3)
-  3c:	00012623          	sw	zero,12(sp)
-  40:	00c12783          	lw	a5,12(sp)
-  44:	fef744e3          	blt	a4,a5,2c <main+0x20>
-  48:	00c12783          	lw	a5,12(sp)
-  4c:	00178793          	addi	a5,a5,1
-  50:	00f12623          	sw	a5,12(sp)
-  54:	fd1ff06f          	j	24 <main+0x18>
+  10:	008006b7          	lui	a3,0x800
+  14:	00012623          	sw	zero,12(sp)
+  18:	0006a023          	sw	zero,0(a3) # 800000 <_stack_top+0x7ff000>
+  1c:	00468713          	addi	a4,a3,4
+  20:	02a00593          	li	a1,42
+  24:	03f00613          	li	a2,63
+  28:	00072783          	lw	a5,0(a4)
+  2c:	0017f793          	andi	a5,a5,1
+  30:	00079a63          	bnez	a5,44 <main+0x38>
+  34:	00c6a023          	sw	a2,0(a3)
+  38:	00072783          	lw	a5,0(a4)
+  3c:	0017f793          	andi	a5,a5,1
+  40:	fe078ae3          	beqz	a5,34 <main+0x28>
+  44:	00b6a023          	sw	a1,0(a3)
+  48:	fe1ff06f          	j	28 <main+0x1c>

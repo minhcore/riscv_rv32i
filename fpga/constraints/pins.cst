@@ -10,6 +10,10 @@ IO_PORT "clk_27m" IO_TYPE=LVCMOS33 PULL_MODE=NONE;
 IO_LOC "btn_reset_n" 3;
 IO_PORT "btn_reset_n" IO_TYPE=LVCMOS33 PULL_MODE=UP;
 
+// Onboard User Pushbutton S2 (Active-Low User Button)
+IO_LOC "btn_user" 4;
+IO_PORT "btn_user" IO_TYPE=LVCMOS33 PULL_MODE=UP;
+
 // Onboard User LEDs (Active-Low: 0 = ON, 1 = OFF)
 IO_LOC "leds[0]" 10;
 IO_LOC "leds[1]" 11;
