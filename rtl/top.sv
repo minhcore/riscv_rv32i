@@ -10,7 +10,11 @@ module top #(
 
     // GPIO
     output logic [GPIO_WIDTH-1:0]   gpio_out,
-    input logic [GPIO_WIDTH-1:0]    gpio_in
+    input logic [GPIO_WIDTH-1:0]    gpio_in,
+
+    // UART
+    output logic                    uart_tx,
+    input logic                     uart_rx
 );
 
 logic stall_net, ram_stall, apb_stall, mem_write_net, mem_read_net, ram_sel, apb_sel, psel_net, rst_n_sync1, rst_n_sync2;
@@ -19,6 +23,17 @@ logic [DEFAULT_WIDTH-1:0] address_net, write_data_net;
 // APB interface
 logic [DEFAULT_WIDTH-1:0] prdata_net, pwdata_net, paddr_net;
 logic pready_net, pwrite_net, penable_net, pslverr_net;
+logic psel_gpio_net, psel_uart_net;
+logic [DEFAULT_WIDTH-1:0] prdata_gpio_net, prdata_uart_net;
+logic pready_gpio_net, pready_uart_net;
+logic pslverr_gpio_net, pslverr_uart_net;
+
+assign psel_gpio_net = psel_net && (paddr_net[19:16] == 4'h0);
+assign psel_uart_net = psel_net && (paddr_net[19:16] == 4'h1);
+
+assign prdata_net = (paddr_net[19:16] == 4'h1) ? prdata_uart_net : prdata_gpio_net;
+assign pready_net = (paddr_net[19:16] == 4'h1) ? pready_uart_net : pready_gpio_net;
+assign pslverr_net = (paddr_net[19:16] == 4'h1) ? pslverr_uart_net : pslverr_gpio_net;
 
 // Address Decoding
 assign ram_sel = (address_net < 32'h0080_0000);
@@ -111,12 +126,27 @@ cpu_apb_bridge #(DEFAULT_WIDTH) cpu_apb_bridge(
 gpio_apb #(.PORT_WIDTH(GPIO_WIDTH), .APB_WIDTH(DEFAULT_WIDTH)) gpio(
     .data_out_port(gpio_out),
     .data_in_port(gpio_in),
-    .prdata(prdata_net),
-    .pready(pready_net),
-    .pslverr(pslverr_net),
+    .prdata(prdata_gpio_net),
+    .pready(pready_gpio_net),
+    .pslverr(pslverr_gpio_net),
     .pclk(clk),
     .presetn(rst_n_sync2),
-    .psel(psel_net),
+    .psel(psel_gpio_net),
+    .pwrite(pwrite_net),
+    .paddr(paddr_net),
+    .penable(penable_net),
+    .pwdata(pwdata_net)
+);
+
+uart_apb #(DEFAULT_WIDTH) uart(
+    .o_tx(uart_tx),
+    .i_rx(uart_rx),
+    .prdata(prdata_uart_net),
+    .pready(pready_uart_net),
+    .pslverr(pslverr_uart_net),
+    .pclk(clk),
+    .presetn(rst_n_sync2),
+    .psel(psel_uart_net),
     .pwrite(pwrite_net),
     .paddr(paddr_net),
     .penable(penable_net),

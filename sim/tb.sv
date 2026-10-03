@@ -6,6 +6,10 @@ module tb;
     logic rst_n;
     logic [7:0] gpio_out;
     logic [7:0] gpio_in;
+    logic uart_tx;
+    logic uart_rx;
+
+    assign uart_rx = uart_tx;
 
     top #(
         .RAM_DEPTH(1024),
@@ -16,7 +20,9 @@ module tb;
         .clk(clk),
         .rst_n(rst_n),
         .gpio_out(gpio_out),
-        .gpio_in(gpio_in)
+        .gpio_in(gpio_in),
+        .uart_tx(uart_tx),
+        .uart_rx(uart_rx)
     );
 
     always #10 clk = ~clk;
@@ -31,7 +37,7 @@ module tb;
         repeat (5) @(posedge clk);
         rst_n = 1;
 
-        repeat (800) @(posedge clk);
+        repeat (20000) @(posedge clk);
         $finish;
     end
 

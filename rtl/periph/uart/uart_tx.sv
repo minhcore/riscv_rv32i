@@ -6,16 +6,18 @@ module uart_tx (
     input logic         rst_n,
     input logic [7:0]   i_data,
     input logic         baud_tick,
-    input logic         tx_en
+    input logic         tx_en,
+    input logic         i_start
 );
 
 typedef enum logic [2:0] { 
     IDLE,
+    WAIT_START,
     START,
     DATA,
     STOP
 } tx_state_e;
-tx_state_e current_state = IDLE;
+tx_state_e current_state;
 tx_state_e next_state;
 logic [3:0] cnt;
 logic [7:0] data_in;
@@ -25,11 +27,15 @@ always_comb begin
     if (!rst_n || !tx_en) begin
         o_tx    = 1'b1;
         o_ready = 1'b0;
-    end else begin
-        o_tx    = 1'b1;
-        o_ready = 1'b1;
+    end
+    else begin
 
         case(current_state)
+        WAIT_START: begin
+            o_tx    = 1'b1;
+            o_ready = 1'b0;
+        end
+
         START: begin
             /* - not yet implement consecutive transfer
                - focus on single transfer */
@@ -64,6 +70,11 @@ always_comb begin
         
         case(current_state)
             IDLE: begin
+                if (i_start) next_state = WAIT_START;
+            end
+
+            WAIT_START: begin
+                next_state = WAIT_START;
                 if (baud_tick) next_state = START;
             end
 
@@ -88,18 +99,25 @@ end
 
 // latch & shift
 always_ff @(posedge clk or negedge rst_n) begin
-    if (!rst_n || !tx_en) begin
+    if (!rst_n) begin
         data_in <= 8'd0;
-    end else if (current_state == START) begin
+    end else if (!tx_en) begin // Yosys is not agree combined with rst_n
+        data_in <= 8'd0;
+    end
+    else if (current_state == START) begin
         data_in <= i_data;
-    end else if ((current_state == DATA) && (baud_tick)) begin
+    end 
+    else if ((current_state == DATA) && (baud_tick)) begin
         data_in <= data_in >> 1;
     end
 end
 
 // counter
 always_ff @(posedge clk or negedge rst_n) begin
-    if (!rst_n || !tx_en) begin
+    if (!rst_n) begin
+        cnt <= 4'd0;
+    end
+    else if (!tx_en) begin // Yosys is not agree combined with rst_n
         cnt <= 4'd0;
     end
     else if (current_state == DATA && baud_tick) begin
@@ -111,6 +129,9 @@ end
 // update current state
 always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
+        current_state <= IDLE;
+    end
+    else if (!tx_en) begin // Yosys is not agree combined with rst_n
         current_state <= IDLE;
     end
     else begin

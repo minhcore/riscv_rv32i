@@ -8,7 +8,9 @@ module fpga_top (
     input  logic       clk_27m,
     input  logic       btn_reset_n,
     input  logic       btn_user,
-    output logic [5:0] leds
+    output logic [5:0] leds,
+    output logic       uart_tx,
+    input  logic       uart_rx
 );
 
     logic [7:0] gpio_out;
@@ -18,7 +20,9 @@ module fpga_top (
         .clk(clk_27m),
         .rst_n(btn_reset_n),
         .gpio_out(gpio_out),
-        .gpio_in({7'b0, btn_user})
+        .gpio_in({7'b0, btn_user}),
+        .uart_tx(uart_tx),
+        .uart_rx(uart_rx)
     );
 
     // Tang Nano 9K onboard LEDs are Active-Low (0 = ON, 1 = OFF).

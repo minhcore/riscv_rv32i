@@ -35,7 +35,11 @@ $rtl_files = @(
     "rtl/mem/ram.sv",
     "rtl/periph/memory_controller.sv",
     "rtl/periph/cpu_apb_bridge.sv",
-    "rtl/periph/gpio_apb.sv",
+    "rtl/periph/gpio/gpio_apb.sv",
+    "rtl/periph/uart/baud_generator.sv",
+    "rtl/periph/uart/uart_tx.sv",
+    "rtl/periph/uart/uart_rx.sv",
+    "rtl/periph/uart/uart_apb.sv",
     "rtl/top.sv",
     "fpga/fpga_top.sv"
 )
